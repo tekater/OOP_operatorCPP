@@ -86,6 +86,20 @@ public:
     int operator[](int index)const  {
         return arr[index];
     }
+
+    void operator()() { // Функтор
+        for (int i = 0; i < size; i++)
+        {
+            arr[i]++;
+        }
+    }
+    void operator()(int x) {
+        for (int i = 0; i < size; i++)
+        {
+            arr[i]+= x;
+        }
+    }
+
 };
 
 enum medals {gold,silver,bronze};
@@ -194,6 +208,71 @@ public:
 
 
 };
+
+class Complex {
+    int Rez;
+    int Imz;
+public:
+    Complex(int r,int z) {
+        Rez = r;
+        Imz = z;
+    }
+    Complex() {
+        Complex(0,0);
+    }
+    Complex(Complex&& obj) : Rez{ obj.Rez }, Imz{ obj.Imz } {
+        obj.Rez = 0;
+        obj.Imz = 0;
+    }
+    void print() {
+        cout << Rez << " + " << Imz << "*i" << endl;
+    }
+    Complex add(const Complex& c1, const Complex& c2) {
+        return Complex(c1.Rez + c2.Rez, c1.Imz + c2.Imz);
+    }
+    void setRez(int r) {
+        Rez = r;
+    }
+    void setImz(int z) {
+        Imz = z;
+    }
+    int getRez() const {
+        return Rez;
+    }
+    int getImz() const {
+        return Imz;
+    }
+    Complex operator+(const Complex& c2) {
+        return Complex(Rez + c2.Rez, Imz + c2.Imz);
+    }
+    Complex operator*(const Complex& c2) {
+        return Complex(Rez * c2.Rez, Imz * c2.Imz);
+    }
+    Complex operator-(const Complex& c2) {
+        return Complex(Rez - c2.Rez, Imz - c2.Imz);
+    }
+    bool operator==(const Complex& c2) {
+        return Rez == c2.Rez;
+    }
+    bool operator!=(const Complex& c2) {
+        return Rez != c2.Rez;
+    }
+    Complex operator()(int x) {
+        return Complex(Rez*x,Imz*x);
+    }
+    //friend ostream& operator<<(ostream& out, const Complex& c1);
+    friend istream& operator>>(istream& in, Complex& c1);
+};
+
+ostream& operator<<(ostream& out, const Complex& c1) {
+    cout << c1.getRez() << " + " << c1.getImz() << "*i" << endl;
+    return out;
+}
+
+istream& operator>>(istream& in, Complex& c1) {
+    in >> c1.Rez >> c1.Imz;
+    return in;
+}
 int main() {
 
     setlocale(0, "");
@@ -214,8 +293,13 @@ int main() {
 
     MedalkiTab MT;
     
-    MT["RUS"][gold] = 5;
-    MT["USA"][bronze] = 7;
-    MT["RUS"][silver] = 100;
-    MT.print();
+    MT["RUS"][gold] = 5; MT["RUS"][silver] = 100; MT["RUS"][bronze] = 1;
+    MT["USA"][gold] = 1; MT["USA"][silver] = 7;   MT["USA"][bronze] = 700;
+    
+    MT.print(); cout << "\n\n";
+
+    Array arar;
+    arar.print();
+    arar();
+    arar.print();
 }
